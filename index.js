@@ -114,11 +114,11 @@ module.exports = (function () {
 		registerConnection: function (connection, collections, cb) {
 			if(!connection.identity) return cb(Errors.IdentityMissing);
 			// if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
-            adapter._modelReferences = collections;
+            _modelReferences = collections;
 
 			adapter._initVogels(function(err){
                 for(val in collections){
-                    adapter._modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
+                    _modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
                         if(!err){
                             err = error;
                         }
