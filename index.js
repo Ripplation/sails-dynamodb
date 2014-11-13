@@ -119,6 +119,8 @@ module.exports = (function () {
 			adapter._initVogels(function(err){
                 for(val in collections){
                     adapter._modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
+                        console.log(JSON.stringify(err));
+                        console.log(JSON.stringify(error));
                         if(!err){
                             err = error;
                         }
