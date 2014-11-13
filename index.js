@@ -558,7 +558,7 @@ module.exports = (function () {
                         if("index" in attributes){
                             indexes.push(columnName);
                         }
-                        var customAttr = attributes.split('_');
+                        var customAttr = attributes.type.split('_');
                         if(customAttr[1] !== undefined){
                             if(customAttr[1] == 'primaryr'){
                                 rangeKey = columnName;
