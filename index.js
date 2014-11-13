@@ -97,7 +97,7 @@ module.exports = (function () {
 			// drop   => Drop schema and data, then recreate it
 			// alter  => Drop/add columns as necessary.
 			// safe   => Don't change anything (good for production DBs)
-			, migrate: 'safe'
+			migrate: 'safe'
 			// , schema: false
 		},
 
