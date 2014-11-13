@@ -101,7 +101,21 @@ module.exports = (function () {
 			// , schema: false
 		},
 
-
+        createjsonlog: function(o){
+            var cache = [];
+            JSON.stringify(o, function(key, value) {
+                if (typeof value === 'object' && value !== null) {
+                    if (cache.indexOf(value) !== -1) {
+                        // Circular reference found, discard key
+                        return;
+                    }
+                    // Store value in our collection
+                    cache.push(value);
+                }
+                return value;
+            });
+            cache = null;
+        },
 		/**
 		 * 
 		 * This method runs when a model is initially registered
@@ -118,7 +132,7 @@ module.exports = (function () {
 
 			adapter._initVogels(function(err){
                 for(val in collections){
-                    console.log(JSON.stringify(collections[val]));
+                    console.log(adapter.createjsonlog(val));
                     _modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
                         if(!err){
                             err = error;
