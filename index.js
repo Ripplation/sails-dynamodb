@@ -601,7 +601,7 @@ module.exports = (function () {
             });
         },
 
-        , _getPrimaryKeys: function (collectionName) {
+        _getPrimaryKeys: function (collectionName) {
             var lodash = _;
             var collection = _modelReferences[collectionName];
 
