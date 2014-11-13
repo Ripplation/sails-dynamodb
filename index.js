@@ -607,6 +607,7 @@ module.exports = (function () {
         _getPrimaryKeys: function (collectionName) {
             var lodash = _;
             var collection = _modelReferences[collectionName];
+            console.log(JSON.stringify(collection));
 
             var maps = lodash.mapValues(collection.definition, "primaryKey");
             var list = lodash.pick(maps, function (value, key) {
