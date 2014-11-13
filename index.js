@@ -115,10 +115,10 @@ module.exports = (function () {
 			if(!connection.identity) return cb(Errors.IdentityMissing);
 			// if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
             _modelReferences = collections;
-            console.log(JSON.stringify(collections));
 
 			adapter._initVogels(function(err){
                 for(val in collections){
+                    console.log(JSON.stringify(collections[val]));
                     _modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
                         if(!err){
                             err = error;
