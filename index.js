@@ -125,24 +125,37 @@ module.exports = (function () {
 		 * @param  {Function} cb		 [description]
 		 * @return {[type]}			  [description]
 		 */
-		registerConnection: function (connection, collections, cb) {
-			if(!connection.identity) return cb(Errors.IdentityMissing);
-			// if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
-            _modelReferences = collections;
+		// registerConnection: function (connection, collections, cb) {
+		// 	if(!connection.identity) return cb(Errors.IdentityMissing);
+		// 	// if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
+  //           _modelReferences = collections;
+  //           console.log(adapter.createjsonlog(val));
 
-			adapter._initVogels(function(err){
-                for(val in collections){
-                    console.log(adapter.createjsonlog(val));
-                    _modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
-                        if(!err){
-                            err = error;
-                        }
-                    });
-                }
-                cb(err);
-			});
-		},
+		// 	adapter._initVogels(function(err){
+  //               for(val in collections){
+  //                   _modelReferences[collections[val].identity] = adapter._attachModel(collections[val], function(error){
+  //                       if(!err){
+  //                           err = error;
+  //                       }
+  //                   });
+  //               }
+  //               cb(err);
+		// 	});
+		// },
 
+        registerCollection: function(collection, cb) {
+            adapter._initVogels(function(err){
+                adapter._modelReferences[collection.identity] = _attachModel(collection, function(error){
+                    if(!err){
+                        err = error;
+                    }
+                    cb(err);
+                });
+                // Keep a reference to this collection
+                // _modelReferences[collection.identity] = collection;
+            });
+        },
+        
 		/**
 		 * Fired when a model is unregistered, typically when the server
 		 * is killed. Useful for tearing-down remaining open connections,
@@ -151,7 +164,7 @@ module.exports = (function () {
 		 * @param  {Function} cb [description]
 		 * @return {[type]}	  [description]
 		 */
-		teardown: function(connection, cb) {
+		teardown: function(cb) {
 			cb();
 		},
 
@@ -167,7 +180,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		define: function(connection, collectionName, definition, cb) {
+		define: function(collectionName, definition, cb) {
 		  // If you need to access your private data for this collection:
 		  var collection = _modelReferences[collectionName];
 
@@ -200,7 +213,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		describe: function(connection, collectionName, cb) {
+		describe: function(collectionName, cb) {
 			// If you need to access your private data for this collection:
 			var collection = _modelReferences[collectionName];
 			var model = collection.model;
@@ -235,7 +248,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		drop: function(connection, collectionName, relations, cb) {
+		drop: function(collectionName, relations, cb) {
 			// If you need to access your private data for this collection:
 			var collection = _modelReferences[collectionName];
 			// Drop a "table" or "collection" schema from the data store
@@ -265,7 +278,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		find: function(connection, collectionName, options, cb) {
+		find: function(collectionName, options, cb) {
 
 			var collection = _modelReferences[collectionName];
 			// Options object is normalized for you:
@@ -334,7 +347,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		create: function(connection, collectionName, values, cb) {
+		create: function(collectionName, values, cb) {
 
 			var Model = collection.model;
 
@@ -367,7 +380,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		update: function(connection, collectionName, options, values, cb) {
+		update: function(collectionName, options, values, cb) {
 			var Model = collection.model;
 
 			// If you need to access your private data for this collection:
@@ -410,7 +423,7 @@ module.exports = (function () {
 		 * @param  {Function} cb			 [description]
 		 * @return {[type]}				  [description]
 		 */
-		destroy: function(connection, collectionName, options, cb) {
+		destroy: function(collectionName, options, cb) {
 			var Model = collection.model;
 
 			// If you need to access your private data for this collection:
