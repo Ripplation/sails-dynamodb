@@ -113,7 +113,7 @@ module.exports = (function () {
 		 */
 		registerConnection: function (connection, collections, cb) {
 			if(!connection.identity) return cb(Errors.IdentityMissing);
-			if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
+			// if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
 
 			adapter._initVogels(function(err){
 				adapter._modelReferences[collection.identity] = _attachModel(collection, function(error){
