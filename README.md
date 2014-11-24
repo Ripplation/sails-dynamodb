@@ -72,7 +72,7 @@ Waterline is a new kind of storage and retrieval engine for Sails.js.  It provid
 
 The MIT License (MIT)
 
-Copyright (c) 2014 dozo
+Copyright (c) 2014 Ripplation Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
