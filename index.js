@@ -80,6 +80,11 @@ module.exports = (function () {
         // (same effect as if these properties were included at the top level of the model definitions)
         defaults: {
             configFile: '../../sails-dynamodb-config.json',
+            /* configFile sample : {
+                "ddb_maxSockets": 100,
+                "ddb_apiVersion": "2012-08-10",
+                "prefix": "dev-"
+            }*/
             config: null,
             credentialsFilePath: './credentials.json',
             // For example:
