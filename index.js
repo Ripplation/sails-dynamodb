@@ -79,12 +79,9 @@ module.exports = (function () {
         // Default configuration for collections
         // (same effect as if these properties were included at the top level of the model definitions)
         defaults: {
-            accessKeyId: null,
-            secretAccessKey: null,
-            region: 'us-west-1',
+            configFile: '../../sails-dynamodb-config.json',
+            config: null,
             credentialsFilePath: './credentials.json',
-            ddb_maxSockets: 100,
-            ddb_apiVersion: "2012-08-10",
             // For example:
             // port: 3306,
             // host: 'localhost',
@@ -167,11 +164,11 @@ module.exports = (function () {
                 return _definedTables[collectionName];
             }
 
-
+            var tableName = adapter.defaults.config + collectionName;
             var primaryKeys = require("lodash").where(collection.definition, { primaryKey: true });
             //console.log("primaryKeys", primaryKeys);
 
-            return Vogels.define(collectionName, function (schema) {
+            return Vogels.define(tableName, function (schema) {
                 //console.log("_getModel", collectionName);
                 var columns = collection.definition;
                 var primaryKeys = []
@@ -244,9 +241,11 @@ module.exports = (function () {
             if(!connection.identity) return cb(Errors.IdentityMissing);
             if(connections[connection.identity]) return cb(Errors.IdentityDuplicate);
 
+            adapter.defaults.config = require(adapter.defaults.configFile);
+            var config = adapter.defaults.config;
             var credentialsPath = adapter.defaults.credentialsFilePath;
-            var ddb_maxSockets = adapter.defaults.ddb_maxSockets;
-            var ddb_apiVersion = adapter.defaults.ddb_apiVersion;
+            var ddb_maxSockets = config.ddb_maxSockets;
+            var ddb_apiVersion = config.ddb_apiVersion;
             var error = null;
             try{
                 AWS.config.loadFromPath(credentialsPath);
@@ -297,10 +296,12 @@ module.exports = (function () {
 
             if(! _definedTables[collectionName] ){
                 var table = adapter._getModel(collectionName);
+                var tableName = table.tableName();
 
                 _definedTables[collectionName] = table;
                 Vogels.createTables({
-                    collectionName: {readCapacity: 1, writeCapacity: 1}
+                    tableName: {readCapacity: 1, writeCapacity: 1}
+                    // collectionName: {readCapacity: 1, writeCapacity: 1}
                 }, function (err) {
                     if(err) {
                         console.warn('Error creating tables', err);
