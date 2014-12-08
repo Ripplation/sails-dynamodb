@@ -85,7 +85,12 @@ module.exports = (function () {
                 "ddb_apiVersion": "2012-08-10",
                 "prefix": "dev-"
             }*/
-            config: null,
+            // default config
+            config: {
+                "ddb_maxSockets": 10,
+                "ddb_apiVersion": "2012-08-10",
+                "prefix": "dev-"
+            },
             credentialsFilePath: './credentials.json',
             // For example:
             // port: 3306,
@@ -169,7 +174,7 @@ module.exports = (function () {
                 return _definedTables[collectionName];
             }
 
-            var tableName = adapter.defaults.config + collectionName;
+            var tableName = adapter.defaults.config.prefix + collectionName;
             var primaryKeys = require("lodash").where(collection.definition, { primaryKey: true });
             //console.log("primaryKeys", primaryKeys);
 
@@ -441,7 +446,7 @@ module.exports = (function () {
                 var model = adapter._getModel(collectionName);
                 if (primaryQuery.length < 1) {  // secondary key search
                     var hashKey = wheres[0];
-                    var query = model.query(options.where[hashKey]).usingIndex(wheres[0] + adapter.indexPrefix)
+                    var query = model.query(options.where[hashKey]).usingIndex(wheres[0] + adapter.indexPrefix);
                 } else {  // primary key search
                     var hashKey = primaryKeys[0];
                     var query = model.query(options.where[hashKey]);
